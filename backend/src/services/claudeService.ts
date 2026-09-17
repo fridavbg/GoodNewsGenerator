@@ -1,0 +1,56 @@
+import Anthropic from '@anthropic-ai/sdk';
+
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+export interface Article {
+  title: string;
+  description: string;
+  url: string;
+  source: { name: string };
+  urlToImage?: string;
+  publishedAt: string;
+}
+
+export async function analyzeArticle(article: Article): Promise<string> {
+  const message = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 300,
+    messages: [
+      {
+        role: 'user',
+        content: `Analyze this news article and explain why it represents positive/constructive news. Be concise (2-3 sentences).
+
+Title: ${article.title}
+Content: ${article.description}
+
+Format your response as: "Why this is good news: [explanation]"`,
+      },
+    ],
+  });
+
+  const textContent = message.content.find((block) => block.type === 'text');
+  return textContent && 'text' in textContent ? textContent.text : 'Unable to analyze';
+}
+
+export async function filterPositiveNews(articles: Article[]): Promise<Article[]> {
+  // Filter articles that are likely positive (heuristic)
+  const positiveKeywords = [
+    'breakthrough',
+    'success',
+    'progress',
+    'innovation',
+    'recovery',
+    'achievement',
+    'growth',
+    'improvement',
+    'solution',
+    'hope',
+  ];
+
+  return articles.filter((article) => {
+    const text = `${article.title} ${article.description}`.toLowerCase();
+    return positiveKeywords.some((keyword) => text.includes(keyword));
+  });
+}
