@@ -2,9 +2,15 @@
   "name": "good-news",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["backend", "frontend"],
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
     "dev": "npm run dev -w backend & npm run dev -w frontend",
     "build": "npm run build -w backend && npm run build -w frontend"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19"
   }
 }
