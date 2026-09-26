@@ -1,19 +1,11 @@
 import { config } from '../config';
 import Anthropic from '@anthropic-ai/sdk';
 import { ExternalApiError } from '../middleware/errorMiddleware';
+import { NewsApiArticle } from '../types/newsApi';
 
 const client = new Anthropic({
   apiKey: config.ANTHROPIC_API_KEY,
 });
-
-export interface Article {
-  title: string;
-  description: string;
-  url: string;
-  source: { name: string };
-  urlToImage?: string;
-  publishedAt: string;
-}
 
 /**
  * Analyze a single article using Claude API
@@ -21,7 +13,7 @@ export interface Article {
  * @param topic - The search topic for context
  * @returns Analysis string explaining why this is good news
  */
-export async function analyzeArticle(article: Article, topic: string): Promise<string> {
+export async function analyzeArticle(article: NewsApiArticle, topic: string): Promise<string> {
   try {
     if (config.MOCK_MODE) {
       console.log(`[MOCK] Analyzing article: "${article.title}" for topic: "${topic}"`);
@@ -90,7 +82,7 @@ export async function analyzeArticle(article: Article, topic: string): Promise<s
  * @param articles - Articles to filter
  * @returns Filtered articles matching positive news keywords
  */
-export function filterPositiveNews(articles: Article[]): Article[] {
+export function filterPositiveNews(articles: NewsApiArticle[]): NewsApiArticle[] {
   const positiveKeywords = [
     'breakthrough',
     'success',
@@ -137,7 +129,7 @@ export function filterPositiveNews(articles: Article[]): Article[] {
 /**
  * Generate mock analysis for testing/development
  */
-function generateMockAnalysis(article: Article, topic: string): string {
+function generateMockAnalysis(article: NewsApiArticle, topic: string): string {
   const mockAnalyses = [
     `This article demonstrates real progress in ${topic}, highlighting innovative solutions that are making a tangible difference in the field.`,
     `Exciting developments in ${topic} show how collaboration and forward-thinking approaches are creating positive outcomes.`,

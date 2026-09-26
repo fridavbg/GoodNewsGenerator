@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
+    "packages/*",
     "backend",
     "frontend"
   ],
   "scripts": {
-    "dev": "npm run dev -w backend & npm run dev -w frontend",
-    "build": "npm run build -w backend && npm run build -w frontend"
+    "postinstall": "npm run build -w @goodnews/shared",
+    "dev": "npm run dev -w @goodnews/shared & npm run dev -w backend & npm run dev -w frontend",
+    "build": "npm run build -w @goodnews/shared && npm run build -w backend && npm run build -w frontend"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19"

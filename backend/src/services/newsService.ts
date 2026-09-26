@@ -1,7 +1,7 @@
 import { config } from '../config';
 import axios from 'axios';
 import { ExternalApiError, BadRequestError } from '../middleware/errorMiddleware';
-import { Article } from './claudeService';
+import { NewsApiArticle } from '../types/newsApi';
 
 const NEWS_API_KEY = config.NEWS_API_KEY;
 const NEWS_API_BASE_URL = 'https://newsapi.org/v2';
@@ -52,7 +52,7 @@ newsApiClient.interceptors.response.use(
  * @param limit - Number of results to return (default 10)
  * @returns Array of articles
  */
-export async function searchNews(topic: string, limit: number = 10): Promise<Article[]> {
+export async function searchNews(topic: string, limit: number = 10): Promise<NewsApiArticle[]> {
   try {
     // Validate inputs
     if (!topic || topic.trim().length === 0) {
