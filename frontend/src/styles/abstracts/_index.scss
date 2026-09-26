@@ -1,0 +1,9 @@
+/**
+ * Abstracts - variables and mixins, no CSS output.
+ *
+ * Usage in any component stylesheet:
+ * @use "<relative path>/styles/abstracts" as *;
+ */
+
+@forward "variables";
+@forward "mixins";

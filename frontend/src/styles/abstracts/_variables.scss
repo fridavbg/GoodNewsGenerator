@@ -1,0 +1,99 @@
+/**
+ * Design tokens - Vintage Newspaper Theme
+ * Variables only: this file outputs no CSS.
+ */
+
+// ============================================
+// COLORS
+// ============================================
+
+$color-newsprint: #f5f1e8; // Aged paper/cream background
+$color-newsprint-dark: #e8e3d6; // Slightly darker cream for contrast
+
+$color-ink-dark: #1a1410; // Deep ink black
+$color-ink-medium: #3d3935; // Medium ink gray
+$color-ink-light: #6b6663; // Light ink gray
+
+$color-accent-primary: #8b3a3a; // Deep burgundy
+$color-accent-primary-dark: #6b2e2e; // Darker burgundy
+$color-accent-light: #b85c5c; // Lighter burgundy
+
+$color-error: #9b4c4c; // Muted burgundy red
+
+$color-text-primary: $color-ink-dark;
+$color-text-secondary: $color-ink-medium;
+$color-text-tertiary: $color-ink-light;
+
+$color-bg-primary: $color-newsprint;
+$color-bg-secondary: $color-newsprint-dark;
+
+$color-border-light: #d4cfc2;
+$color-border-medium: #b8b3a8;
+
+// ============================================
+// SPACING (4px base unit)
+// ============================================
+
+$spacing-2xs: 0.125rem; // 2px
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-base: 1rem; // 16px
+$spacing-md: 1.5rem; // 24px
+$spacing-lg: 2rem; // 32px
+$spacing-xl: 3rem; // 48px
+$spacing-2xl: 4rem; // 64px
+
+// Space between cards/columns
+$gutter-mobile: $spacing-md;
+$gutter-tablet: $spacing-lg;
+$gutter-desktop: $spacing-xl;
+
+$container-max-width: 80rem; // 1280px (newspaper page width)
+
+// ============================================
+// SHAPE & MOTION
+// ============================================
+
+$shadow-lg:
+    0 4px 8px 0 rgba(26, 20, 16, 0.12),
+    0 2px 4px 0 rgba(26, 20, 16, 0.08);
+
+$radius: 2px; // Near-square corners for a newspaper feel
+
+$transition-normal: 200ms ease-in-out;
+
+// ============================================
+// TYPOGRAPHY
+// ============================================
+
+// Serif for headlines (vintage newspaper masthead style)
+$font-serif: Georgia, "Garamond", "Times New Roman", serif;
+
+// Sans-serif for body text
+$font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-base: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.25rem; // 20px
+$font-size-2xl: 1.5rem; // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-size-4xl: 2.25rem; // 36px
+$font-size-5xl: 3rem; // 48px
+
+$font-weight-normal: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.3; // Headlines
+$line-height-normal: 1.6; // Body text
+
+// ============================================
+// BREAKPOINTS (mobile-first)
+// ============================================
+
+$breakpoint-sm: 640px; // Larger phones
+$breakpoint-md: 768px; // Tablets
+$breakpoint-lg: 1024px; // Desktop

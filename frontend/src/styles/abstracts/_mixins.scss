@@ -1,0 +1,72 @@
+/**
+ * Mixins - media queries, layout and typography patterns
+ * Mixins only: this file outputs no CSS.
+ */
+
+@use "variables" as *;
+
+// ============================================
+// MEDIA QUERIES (mobile-first)
+// ============================================
+
+@mixin media-sm {
+    @media (min-width: $breakpoint-sm) {
+        @content;
+    }
+}
+
+@mixin media-md {
+    @media (min-width: $breakpoint-md) {
+        @content;
+    }
+}
+
+@mixin media-lg {
+    @media (min-width: $breakpoint-lg) {
+        @content;
+    }
+}
+
+// ============================================
+// LAYOUT
+// ============================================
+
+// Centered, max-width page column
+@mixin container {
+    width: 100%;
+    max-width: $container-max-width;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 $spacing-md;
+
+    @include media-md {
+        padding: 0 $spacing-lg;
+    }
+}
+
+// ============================================
+// TYPOGRAPHY
+// ============================================
+
+@mixin heading($size) {
+    font-family: $font-serif;
+    font-size: $size;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    color: $color-text-primary;
+}
+
+@mixin heading-masthead {
+    @include heading($font-size-5xl);
+    color: $color-accent-primary;
+}
+
+@mixin text-secondary {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+}
+
+@mixin text-small {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+}

@@ -1,0 +1,58 @@
+/**
+ * Base - Typography
+ * Element-level typography styling
+ */
+
+@use "../abstracts" as *;
+
+h1,
+h2,
+h3,
+h4 {
+    margin-bottom: $spacing-md;
+}
+
+h1 {
+    @include heading($font-size-4xl);
+}
+
+h2 {
+    @include heading($font-size-3xl);
+}
+
+h3 {
+    @include heading($font-size-2xl);
+}
+
+h4 {
+    @include heading($font-size-xl);
+}
+
+p {
+    margin-bottom: $spacing-sm;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+small {
+    @include text-small;
+}
+
+a {
+    color: $color-accent-primary;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color $transition-normal, border-color $transition-normal;
+
+    &:hover {
+        color: $color-accent-primary-dark;
+        border-bottom-color: $color-accent-primary;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $color-accent-primary;
+        outline-offset: 2px;
+    }
+}

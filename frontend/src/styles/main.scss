@@ -1,24 +1,9 @@
 // ============================================
-// VARIABLES & CONFIGURATION
+// GLOBAL STYLES
 // ============================================
-@import './variables/config.scss';
+// Only element-level styles live here.
+// Component styles sit next to their component (e.g. ArticleCard.scss)
+// and pull in tokens with: @use "<path>/styles/abstracts" as *;
 
-// ============================================
-// MIXINS
-// ============================================
-@import './mixins/index.scss';
-
-// ============================================
-// BASE STYLES
-// ============================================
-@import './base/index.scss';
-
-// ============================================
-// COMPONENT STYLES
-// ============================================
-@import './components/index.scss';
-
-// ============================================
-// UTILITIES
-// ============================================
-@import './utilities.scss';
+@use "./base/reset";
+@use "./base/typography";
