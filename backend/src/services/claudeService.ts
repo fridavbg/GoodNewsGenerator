@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { ExternalApiError } from '../middleware/errorMiddleware';
 
 const MOCK_MODE = process.env.MOCK_CLAUDE === 'true';
 const client = new Anthropic({
@@ -14,54 +15,160 @@ export interface Article {
   publishedAt: string;
 }
 
-export async function analyzeArticle(article: Article): Promise<string> {
-  if (MOCK_MODE) {
-    // Mock response (free, instant)
-    return `Why this is good news: This article demonstrates positive progress in ${article.title.toLowerCase()}. It highlights constructive solutions and real-world improvements.`;
+
+/**
+ * Analyze a single article using Claude API
+ * @param article - The article to analyze
+ * @param topic - The search topic for context
+ * @returns Analysis string explaining why this is good news
+ */
+export async function analyzeArticle(
+  article: Article,
+  topic: string
+): Promise<string> {
+  const MOCK_MODE = process.env.MOCK_CLAUDE === 'true';
+
+  try {
+    if (MOCK_MODE) {
+      console.log(`[MOCK] Analyzing article: "${article.title}" for topic: "${topic}"`);
+      return generateMockAnalysis(article, topic);
+    }
+
+    console.log(`[CLAUDE API] Analyzing article: "${article.title}"`);
+
+    const prompt = `
+      Article Title: ${article.title}
+      Description: ${article.description}
+ 
+      User searched for: "${topic}"
+ 
+      Briefly explain (1-2 sentences) why this article is positive news and relevant to "${topic}".
+      Focus on progress, solutions, breakthroughs, or hopeful developments.
+    `;
+
+    const message = await client.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 150,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+    });
+
+    const analysis = message.content
+      .filter((block) => block.type === 'text')
+      .map((block) => (block as { type: 'text'; text: string }).text)
+      .join('\n')
+      .trim();
+
+    if (!analysis) {
+      throw new ExternalApiError(
+        'Claude returned empty response',
+        'Anthropic',
+      );
+    }
+
+    console.log(`[CLAUDE API] ✓ Analysis complete for: "${article.title}"`);
+    return analysis;
+  } catch (error) {
+    console.error(`[ERROR] Claude API error:`, error);
+
+    if (error instanceof Error) {
+      if (error.message.includes('401')) {
+        throw new ExternalApiError(
+          'Invalid Anthropic API key',
+          'Anthropic',
+          error,
+        );
+      }
+      if (error.message.includes('429')) {
+        throw new ExternalApiError(
+          'Claude API rate limit exceeded. Try again later.',
+          'Anthropic',
+          error,
+        );
+      }
+      if (error.message.includes('timeout')) {
+        throw new ExternalApiError(
+          'Claude API request timed out. Try again.',
+          'Anthropic',
+          error,
+        );
+      }
+    }
+
+    throw new ExternalApiError(
+      'Failed to analyze article with Claude API',
+      'Anthropic',
+      error,
+    );
   }
-
-  // Real Claude API call (costs money, only in Phase 4)
-  const message = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 300,
-    messages: [
-      {
-        role: 'user',
-        content: `Analyze this news article and explain why it represents positive/constructive news. Be concise (2-3 sentences).
-
-Title: ${article.title}
-Content: ${article.description}
-
-Format: "Why this is good news: [explanation]"`,
-      },
-    ],
-  });
-
-  const textContent = message.content.find((block) => block.type === 'text');
-  return textContent && 'text' in textContent ? textContent.text : 'Unable to analyze';
 }
-
-export async function filterPositiveNews(articles: Article[]): Promise<Article[]> {
-  // Filter articles that are likely positive (heuristic)
+/**
+ * Filter articles to only positive/good news using keyword heuristics
+ * @param articles - Articles to filter
+ * @returns Filtered articles matching positive news keywords
+ */
+export function filterPositiveNews(articles: Article[]): Article[] {
   const positiveKeywords = [
     'breakthrough',
     'success',
-    'progress',
     'innovation',
+    'progress',
     'recovery',
-    'achievement',
-    'growth',
-    'improvement',
-    'solution',
-    'hope',
     'advance',
     'develop',
     'new',
     'technology',
+    'solution',
+    'award',
+    'discover',
+    'improve',
+    'record',
+    'growth',
+    'expand',
+    'launch',
+    'invest',
+    'partnership',
+    'milestone',
+    'achievement',
+    'positive',
+    'opportunity',
+    'hope',
+    'better',
+    'renewable',
+    'sustainable',
+    'eco-friendly',
   ];
 
-  return articles.filter((article) => {
-    const text = `${article.title} ${article.description}`.toLowerCase();
-    return positiveKeywords.some((keyword) => text.includes(keyword));
+  const filtered = articles.filter((article) => {
+    const titleLower = article.title.toLowerCase();
+    const descriptionLower = (article.description || '').toLowerCase();
+    const combined = `${titleLower} ${descriptionLower}`;
+
+    return positiveKeywords.some((keyword) => combined.includes(keyword));
   });
+
+  console.log(
+    `[FILTER] Found ${filtered.length} positive articles from ${articles.length} total`,
+  );
+  return filtered;
+}
+
+/**
+ * Generate mock analysis for testing/development
+ */
+function generateMockAnalysis(article: Article, topic: string): string {
+  const mockAnalyses = [
+    `This article demonstrates real progress in ${topic}, highlighting innovative solutions that are making a tangible difference in the field.`,
+    `Exciting developments in ${topic} show how collaboration and forward-thinking approaches are creating positive outcomes.`,
+    `This breakthrough in ${topic} represents a significant step forward, demonstrating the power of sustained effort and research.`,
+    `Evidence of growth and positive momentum in ${topic}, showing that meaningful change is possible.`,
+    `This story exemplifies the kind of innovation in ${topic} that gives hope for a better future.`,
+  ];
+
+  const random = Math.floor(Math.random() * mockAnalyses.length);
+  return mockAnalyses[random];
 }
