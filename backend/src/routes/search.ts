@@ -55,12 +55,14 @@ router.post(
 
       if (articles.length === 0) {
         console.warn(`[search] No articles found for topic: "${topic}"`);
-        return res.json({
+
+        res.json({
           topic,
           count: 0,
           results: [],
           message: 'No articles found for this topic',
         });
+        return;
       }
 
       // Step 2: Filter for positive news
@@ -69,12 +71,13 @@ router.post(
 
       if (positiveArticles.length === 0) {
         console.warn(`[search] No positive articles found after filtering`);
-        return res.json({
+        res.json({
           topic,
           count: 0,
           results: [],
           message: 'No positive news found for this topic',
         });
+        return;
       }
 
       // Step 3: Analyze each article with Claude

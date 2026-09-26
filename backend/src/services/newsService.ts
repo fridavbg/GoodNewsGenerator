@@ -1,10 +1,9 @@
-import dotenv from 'dotenv';
+import { config } from '../config';
 import axios from 'axios';
 import { ExternalApiError, BadRequestError } from '../middleware/errorMiddleware';
 import { Article } from './claudeService';
-dotenv.config();
 
-const NEWS_API_KEY = process.env.NEWS_API_KEY;
+const NEWS_API_KEY = config.NEWS_API_KEY;
 const NEWS_API_BASE_URL = 'https://newsapi.org/v2';
 
 // Create axios instance with logging

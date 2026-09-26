@@ -1,9 +1,9 @@
+import { config } from '../config';
 import Anthropic from '@anthropic-ai/sdk';
 import { ExternalApiError } from '../middleware/errorMiddleware';
 
-const MOCK_MODE = process.env.MOCK_CLAUDE === 'true';
 const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+  apiKey: config.ANTHROPIC_API_KEY,
 });
 
 export interface Article {
@@ -26,17 +26,15 @@ export async function analyzeArticle(
   article: Article,
   topic: string
 ): Promise<string> {
-  const MOCK_MODE = process.env.MOCK_CLAUDE === 'true';
+    try {
+      if (config.MOCK_MODE) {
+        console.log(`[MOCK] Analyzing article: "${article.title}" for topic: "${topic}"`);
+        return generateMockAnalysis(article, topic);
+      }
 
-  try {
-    if (MOCK_MODE) {
-      console.log(`[MOCK] Analyzing article: "${article.title}" for topic: "${topic}"`);
-      return generateMockAnalysis(article, topic);
-    }
+      console.log(`[CLAUDE API] Analyzing article: "${article.title}"`);
 
-    console.log(`[CLAUDE API] Analyzing article: "${article.title}"`);
-
-    const prompt = `
+      const prompt = `
       Article Title: ${article.title}
       Description: ${article.description}
  
@@ -46,65 +44,65 @@ export async function analyzeArticle(
       Focus on progress, solutions, breakthroughs, or hopeful developments.
     `;
 
-    const message = await client.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 150,
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-    });
+      const message = await client.messages.create({
+        model: config.CLAUDE_MODEL,
+        max_tokens: 150,
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+      });
 
-    const analysis = message.content
-      .filter((block) => block.type === 'text')
-      .map((block) => (block as { type: 'text'; text: string }).text)
-      .join('\n')
-      .trim();
+      const analysis = message.content
+        .filter((block) => block.type === 'text')
+        .map((block) => (block as { type: 'text'; text: string }).text)
+        .join('\n')
+        .trim();
 
-    if (!analysis) {
+      if (!analysis) {
+        throw new ExternalApiError(
+          'Claude returned empty response',
+          'Anthropic',
+        );
+      }
+
+      console.log(`[CLAUDE API] ✓ Analysis complete for: "${article.title}"`);
+      return analysis;
+    } catch (error) {
+      console.error(`[ERROR] Claude API error:`, error);
+
+      if (error instanceof Error) {
+        if (error.message.includes('401')) {
+          throw new ExternalApiError(
+            'Invalid Anthropic API key',
+            'Anthropic',
+            error,
+          );
+        }
+        if (error.message.includes('429')) {
+          throw new ExternalApiError(
+            'Claude API rate limit exceeded. Try again later.',
+            'Anthropic',
+            error,
+          );
+        }
+        if (error.message.includes('timeout')) {
+          throw new ExternalApiError(
+            'Claude API request timed out. Try again.',
+            'Anthropic',
+            error,
+          );
+        }
+      }
+
       throw new ExternalApiError(
-        'Claude returned empty response',
+        'Failed to analyze article with Claude API',
         'Anthropic',
+        error,
       );
     }
-
-    console.log(`[CLAUDE API] ✓ Analysis complete for: "${article.title}"`);
-    return analysis;
-  } catch (error) {
-    console.error(`[ERROR] Claude API error:`, error);
-
-    if (error instanceof Error) {
-      if (error.message.includes('401')) {
-        throw new ExternalApiError(
-          'Invalid Anthropic API key',
-          'Anthropic',
-          error,
-        );
-      }
-      if (error.message.includes('429')) {
-        throw new ExternalApiError(
-          'Claude API rate limit exceeded. Try again later.',
-          'Anthropic',
-          error,
-        );
-      }
-      if (error.message.includes('timeout')) {
-        throw new ExternalApiError(
-          'Claude API request timed out. Try again.',
-          'Anthropic',
-          error,
-        );
-      }
-    }
-
-    throw new ExternalApiError(
-      'Failed to analyze article with Claude API',
-      'Anthropic',
-      error,
-    );
-  }
 }
 /**
  * Filter articles to only positive/good news using keyword heuristics

@@ -1,13 +1,11 @@
-import dotenv from 'dotenv';
+import { config } from './config';
 import express, { Application } from 'express';
 import cors from 'cors';
 import searchRouter from './routes/search';
 import { errorHandler } from './middleware/errorMiddleware';
 
-dotenv.config();
-
 const app: Application = express();
-const PORT = process.env.PORT || 5000;
+const PORT = config.PORT;
 
 // Logging middleware - log all incoming requests
 app.use((req, res, next) => {
@@ -19,27 +17,6 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json());
 
-/**
- * Environment Validation
- * Check for required environment variables on startup
- */
-const requiredEnvVars = ['ANTHROPIC_API_KEY', 'NEWS_API_KEY'];
-const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
-
-if (missingEnvVars.length > 0) {
-  console.error('❌ Missing required environment variables:');
-  missingEnvVars.forEach((key) => {
-    console.error(`   - ${key}`);
-  });
-  console.error('');
-  console.error('Please create a .env file with the following:');
-  console.error('   ANTHROPIC_API_KEY=sk-ant-...');
-  console.error('   NEWS_API_KEY=your-newsapi-key');
-  console.error('   MOCK_CLAUDE=true  (optional, for development)');
-  console.error('');
-  process.exit(1);
-}
-
 
 // Environment configuration logging
 console.log(`
@@ -47,8 +24,8 @@ console.log(`
 ║     GoodNews Backend Starting...        ║
 ╚════════════════════════════════════════╝
 `);
-console.log(`NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
-console.log(`MOCK_CLAUDE: ${process.env.MOCK_CLAUDE || 'false'}`);
+console.log(`NODE_ENV: ${config.NODE_ENV}`);
+console.log(`MOCK_MODE: ${config.MOCK_MODE}`);
 console.log(`PORT: ${PORT}`);
 console.log('');
 
