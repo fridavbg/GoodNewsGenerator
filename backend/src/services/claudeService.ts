@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 
+const MOCK_MODE = process.env.MOCK_CLAUDE === 'true';
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -14,6 +15,12 @@ export interface Article {
 }
 
 export async function analyzeArticle(article: Article): Promise<string> {
+  if (MOCK_MODE) {
+    // Mock response (free, instant)
+    return `Why this is good news: This article demonstrates positive progress in ${article.title.toLowerCase()}. It highlights constructive solutions and real-world improvements.`;
+  }
+
+  // Real Claude API call (costs money, only in Phase 4)
   const message = await client.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 300,
@@ -25,7 +32,7 @@ export async function analyzeArticle(article: Article): Promise<string> {
 Title: ${article.title}
 Content: ${article.description}
 
-Format your response as: "Why this is good news: [explanation]"`,
+Format: "Why this is good news: [explanation]"`,
       },
     ],
   });
@@ -47,6 +54,10 @@ export async function filterPositiveNews(articles: Article[]): Promise<Article[]
     'improvement',
     'solution',
     'hope',
+    'advance',
+    'develop',
+    'new',
+    'technology',
   ];
 
   return articles.filter((article) => {
