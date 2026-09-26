@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run typecheck && tsx src/index.ts",
+    "dev": "npm run typecheck && npm run format && tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
     "start": "node dist/index.js",

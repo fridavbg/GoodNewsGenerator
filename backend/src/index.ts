@@ -24,6 +24,7 @@ console.log(`
 ║     GoodNews Backend Starting...        ║
 ╚════════════════════════════════════════╝
 `);
+console.log(`MODEL: ${config.CLAUDE_MODEL}`);
 console.log(`NODE_ENV: ${config.NODE_ENV}`);
 console.log(`MOCK_MODE: ${config.MOCK_MODE}`);
 console.log(`PORT: ${PORT}`);

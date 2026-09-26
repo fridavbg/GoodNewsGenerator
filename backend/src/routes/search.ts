@@ -99,7 +99,7 @@ router.post(
               error: analyzeError instanceof Error ? analyzeError.message : 'Unknown error',
             };
           }
-        }),
+        })
       );
 
       console.log(`[search] ✓ Successfully processed ${results.length} articles`);
@@ -116,11 +116,10 @@ router.post(
       }
       throw new AppError(
         `Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        500,
+        500
       );
     }
-  }),
+  })
 );
-
 
 export default router;

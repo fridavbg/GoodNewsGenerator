@@ -21,20 +21,21 @@ newsApiClient.interceptors.request.use(
   (error) => {
     console.error('[NewsAPI] Request error:', error.message);
     return Promise.reject(error);
-  },
+  }
 );
-
 
 // Response interceptor - log responses and handle errors
 newsApiClient.interceptors.response.use(
   (response) => {
-    console.log(`[NewsAPI] ← ${response.status} OK (${response.data.articles?.length || 0} articles)`);
+    console.log(
+      `[NewsAPI] ← ${response.status} OK (${response.data.articles?.length || 0} articles)`
+    );
     return response;
   },
   (error) => {
     if (error.response) {
       console.error(
-        `[NewsAPI] Error: ${error.response.status} - ${error.response.data?.message || error.message}`,
+        `[NewsAPI] Error: ${error.response.status} - ${error.response.data?.message || error.message}`
       );
     } else if (error.request) {
       console.error(`[NewsAPI] No response from server:`, error.message);
@@ -42,7 +43,7 @@ newsApiClient.interceptors.response.use(
       console.error(`[NewsAPI] Error:`, error.message);
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 /**
@@ -95,7 +96,7 @@ export async function searchNews(topic: string, limit: number = 10): Promise<Art
         throw new ExternalApiError(
           'Invalid NewsAPI key. Check your API_KEY in .env',
           'NewsAPI',
-          error,
+          error
         );
       }
 
@@ -103,39 +104,31 @@ export async function searchNews(topic: string, limit: number = 10): Promise<Art
         throw new ExternalApiError(
           'NewsAPI rate limit exceeded. Try again in a few minutes.',
           'NewsAPI',
-          error,
+          error
         );
       }
 
       if (error.code === 'ECONNABORTED') {
-        throw new ExternalApiError(
-          'NewsAPI request timed out. Try again.',
-          'NewsAPI',
-          error,
-        );
+        throw new ExternalApiError('NewsAPI request timed out. Try again.', 'NewsAPI', error);
       }
 
       if (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED')) {
         throw new ExternalApiError(
           'Could not connect to NewsAPI. Check your internet connection.',
           'NewsAPI',
-          error,
+          error
         );
       }
     }
 
     if (error instanceof Error && error.message.includes('NEWS_API_KEY')) {
-      throw new ExternalApiError(
-        'NEWS_API_KEY environment variable is not set',
-        'NewsAPI',
-        error,
-      );
+      throw new ExternalApiError('NEWS_API_KEY environment variable is not set', 'NewsAPI', error);
     }
 
     throw new ExternalApiError(
       `Failed to fetch news from NewsAPI: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'NewsAPI',
-      error,
+      error
     );
   }
 }
