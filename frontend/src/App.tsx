@@ -1,21 +1,24 @@
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import { addToHistory } from './store/slices/uiSlice';
+import { useTopHeadlines } from './hooks/useApi';
 
 export default function App() {
-  const dispatch = useAppDispatch();
-  const searchHistory = useAppSelector(state => state.ui.searchHistory);
-
-  const handleTest = () => {
-    dispatch(addToHistory('test search'));
-    // Debug: check localStorage
-    console.log('After dispatch - localStorage:', localStorage.getItem('searchHistory'));
-  };
+  const { articles, loading, error } = useTopHeadlines('us');
 
   return (
     <div>
-      <button onClick={handleTest}>Test Redux</button>
-      <p>Search History: {JSON.stringify(searchHistory)}</p>
-      <p>localStorage check: {localStorage.getItem('searchHistory')}</p>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      {articles.length > 0 && (
+        <div>
+          <h1>Top Headlines ({articles.length})</h1>
+          {articles.slice(0, 5).map((article) => (
+            <div key={article.id} style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}>
+              <h3>{article.title}</h3>
+              <p>{article.description}</p>
+              <small>{article.source} • {new Date(article.publishedAt).toLocaleDateString()}</small>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -58,7 +58,7 @@ const newsSlice = createSlice({
          * Set error message
          * @param error - Error message string
          */
-        setError: (state, action: PayloadAction<string>) => {
+        setError: (state, action: PayloadAction<string | null>) => {
             state.error = action.payload;
             state.loading = false;
         },
