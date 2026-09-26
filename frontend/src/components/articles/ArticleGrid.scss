@@ -1,0 +1,18 @@
+@use "../../styles/abstracts" as *;
+
+// 1 column on mobile, 2 on tablet, 3 on desktop
+.article-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $gutter-mobile;
+
+    @include media-sm {
+        grid-template-columns: repeat(2, 1fr);
+        gap: $gutter-tablet;
+    }
+
+    @include media-lg {
+        grid-template-columns: repeat(3, 1fr);
+        gap: $gutter-desktop;
+    }
+}

@@ -1,0 +1,97 @@
+@use "../../styles/abstracts" as *;
+
+.article-card {
+    display: flex;
+    flex-direction: column;
+    background-color: $color-bg-secondary;
+    border: 1px solid $color-border-light;
+    border-radius: $radius;
+    overflow: hidden;
+    transition: box-shadow $transition-normal;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: $shadow-lg;
+    }
+
+    &__image {
+        width: 100%;
+        height: 12.5rem;
+        background: $color-bg-secondary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            height: 12.5rem;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        &:empty::before {
+            padding: $spacing-lg;
+            content: "No image available";
+            color: $color-text-tertiary;
+        }
+    }
+
+    &__content {
+        padding: $spacing-lg;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-md;
+    }
+
+    &__title {
+        @include heading($font-size-2xl);
+        margin: 0;
+    }
+
+    &__favorite {
+        flex-shrink: 0;
+        background: none;
+        border: 2px solid transparent;
+        border-radius: 50%;
+        font-size: $font-size-2xl;
+        color: $color-text-tertiary;
+        transition: color $transition-normal, transform $transition-normal;
+
+        &.active {
+            color: $color-accent-primary;
+            border-color: $color-accent-primary;
+        }
+
+        &:hover {
+            color: $color-accent-primary;
+            transform: scale(1.2);
+        }
+    }
+
+    &__description {
+        flex: 1;
+        margin-bottom: $spacing-md;
+    }
+
+    &__footer {
+        @include text-small;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-md;
+        padding-top: $spacing-sm;
+        border-top: 1px solid $color-border-medium;
+    }
+
+    &__link {
+        margin-top: auto;
+        align-self: flex-start;
+    }
+}

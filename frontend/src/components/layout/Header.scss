@@ -1,0 +1,26 @@
+@use "../../styles/abstracts" as *;
+
+.header {
+    background-color: $color-bg-primary;
+    border-bottom: 3px solid $color-accent-primary;
+    padding: $spacing-md 0;
+
+    @include media-md {
+        padding: $spacing-lg 0;
+    }
+
+    &__inner {
+        @include container;
+        text-align: center;
+    }
+
+    &__title {
+        @include heading-masthead;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__subtitle {
+        @include text-secondary;
+        font-style: italic;
+    }
+}

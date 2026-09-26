@@ -1,0 +1,14 @@
+@use "../../styles/abstracts" as *;
+
+// Page shell: header on top, footer pushed to the bottom on short pages
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    &__main {
+        @include container;
+        flex: 1;
+        padding-top: $spacing-lg;
+    }
+}
