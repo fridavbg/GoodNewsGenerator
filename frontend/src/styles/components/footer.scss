@@ -1,0 +1,29 @@
+/**
+ * Components - Footer
+ * Page footer styling
+ */
+
+@import '../variables/config.scss';
+@import '../mixins/mixins-index.scss';
+
+// ============================================
+// FOOTER COMPONENT
+// ============================================
+
+.footer {
+  background-color: $color-bg-secondary;
+  border-top: 2px solid $color-border-medium;
+  padding: $spacing-lg 0;
+  margin-top: $spacing-2xl;
+
+  @media (max-width: $breakpoint-md - 1px) {
+    padding: $spacing-md 0;
+    margin-top: $spacing-xl;
+  }
+
+  p {
+    @include text-secondary;
+    text-align: center;
+    margin: 0;
+  }
+}

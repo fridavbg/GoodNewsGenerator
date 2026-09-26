@@ -1,0 +1,127 @@
+/**
+ * Mixins - Typography
+ * Text styles and font utilities
+ */
+
+@import '../variables/config.scss';
+
+// ============================================
+// HEADING MIXINS
+// ============================================
+
+/**
+ * Masthead - largest headline (48px, serif, burgundy)
+ * @example @include heading-masthead;
+ */
+@mixin heading-masthead {
+  font-family: $font-serif;
+  font-size: $font-size-5xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-accent-primary;
+  margin-bottom: $spacing-md;
+}
+
+/**
+ * H1 - article headline (36px, serif)
+ * @example @include heading-h1;
+ */
+@mixin heading-h1 {
+  font-family: $font-serif;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+/**
+ * H2 - section heading (30px, serif)
+ * @example @include heading-h2;
+ */
+@mixin heading-h2 {
+  font-family: $font-serif;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+/**
+ * H3 - subsection heading (24px, serif)
+ * @example @include heading-h3;
+ */
+@mixin heading-h3 {
+  font-family: $font-serif;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+/**
+ * H4 - minor heading (20px, serif)
+ * @example @include heading-h4;
+ */
+@mixin heading-h4 {
+  font-family: $font-serif;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+// ============================================
+// BODY TEXT MIXINS
+// ============================================
+
+/**
+ * Body text - standard reading text
+ * @example @include text-body;
+ */
+@mixin text-body {
+  font-family: $font-sans;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  color: $color-text-primary;
+}
+
+/**
+ * Secondary text - smaller, muted
+ * @example @include text-secondary;
+ */
+@mixin text-secondary {
+  font-family: $font-sans;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  color: $color-text-secondary;
+}
+
+/**
+ * Small text - smallest body text
+ * @example @include text-small;
+ */
+@mixin text-small {
+  font-family: $font-sans;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  color: $color-text-tertiary;
+}
+
+/**
+ * Byline - author/date info with italic and border
+ * @example @include byline;
+ */
+@mixin byline {
+  font-family: $font-sans;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-normal;
+  font-style: italic;
+  color: $color-text-secondary;
+}

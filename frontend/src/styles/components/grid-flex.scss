@@ -1,0 +1,73 @@
+/**
+ * Components - Grid & Flex
+ * Flexible and grid layout component styling
+ */
+
+@import '../variables/config.scss';
+@import '../mixins/mixins-index.scss';
+
+// ============================================
+// GRID COMPONENT
+// ============================================
+
+.grid {
+  display: grid;
+  width: 100%;
+
+  &--responsive {
+    grid-template-columns: 1fr;
+
+    @media (min-width: $breakpoint-md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: $breakpoint-lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &--cols-1 {
+    @include grid-cols(1);
+  }
+
+  &--cols-2 {
+    @include grid-cols(2);
+  }
+
+  &--cols-3 {
+    @include grid-cols(3);
+  }
+
+  &--cols-4 {
+    @include grid-cols(4);
+  }
+}
+
+// ============================================
+// FLEX COMPONENT
+// ============================================
+
+.flex {
+  display: flex;
+
+  &--row {
+    flex-direction: row;
+  }
+
+  &--col {
+    flex-direction: column;
+  }
+
+  &-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+// ============================================
+// STACK COMPONENT
+// ============================================
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}

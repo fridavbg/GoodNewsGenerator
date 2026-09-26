@@ -1,0 +1,366 @@
+/**
+ * Utilities - Helper classes
+ * Spacing, display, visibility, colors, borders, shadows, and responsive utilities
+ */
+
+@import './variables/config.scss';
+@import './mixins/mixins-index.scss';
+
+// ============================================
+// SPACING UTILITIES (Generated from $spacing map)
+// ============================================
+
+@each $size, $value in $spacing {
+  // Margin utilities
+  .m-#{$size} { margin: $value; }
+  .mt-#{$size} { margin-top: $value; }
+  .mr-#{$size} { margin-right: $value; }
+  .mb-#{$size} { margin-bottom: $value; }
+  .ml-#{$size} { margin-left: $value; }
+  .mx-#{$size} { margin-left: $value; margin-right: $value; }
+  .my-#{$size} { margin-top: $value; margin-bottom: $value; }
+
+  // Padding utilities
+  .p-#{$size} { padding: $value; }
+  .pt-#{$size} { padding-top: $value; }
+  .pr-#{$size} { padding-right: $value; }
+  .pb-#{$size} { padding-bottom: $value; }
+  .pl-#{$size} { padding-left: $value; }
+  .px-#{$size} { padding-left: $value; padding-right: $value; }
+  .py-#{$size} { padding-top: $value; padding-bottom: $value; }
+
+  // Gap utilities
+  .gap-#{$size} { gap: $value; }
+}
+
+// ============================================
+// DISPLAY UTILITIES
+// ============================================
+
+.block { display: block; }
+.inline-block { display: inline-block; }
+.inline { display: inline; }
+.flex { display: flex; }
+.grid { display: grid; }
+.hidden { display: none !important; }
+.visible { visibility: visible; }
+.invisible { visibility: hidden; }
+
+// ============================================
+// FLEXBOX UTILITIES
+// ============================================
+
+.flex-center { @include flex-center; }
+.flex-between { @include flex-between; }
+.flex-col { @include flex-col; }
+.flex-gap { @include flex-gap; }
+.flex-col-gap { @include flex-col-gap; }
+
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.items-stretch { align-items: stretch; }
+
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+
+// ============================================
+// GRID UTILITIES
+// ============================================
+
+.grid-cols-1 { @include grid-cols(1); }
+.grid-cols-2 { @include grid-cols(2); }
+.grid-cols-3 { @include grid-cols(3); }
+.grid-cols-4 { @include grid-cols(4); }
+.grid-gap { @include grid-gap; }
+
+// ============================================
+// SIZING UTILITIES
+// ============================================
+
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.h-full { height: 100%; }
+.h-auto { height: auto; }
+.w-screen { width: 100vw; }
+.h-screen { height: 100vh; }
+.max-w-container { @include container; }
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+// ============================================
+// TEXT ALIGNMENT & TRANSFORMATION
+// ============================================
+
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+.uppercase { text-transform: uppercase; letter-spacing: 0.05em; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+.italic { font-style: italic; }
+.no-italic { font-style: normal; }
+
+// ============================================
+// FONT UTILITIES
+// ============================================
+
+.font-serif { font-family: $font-serif; }
+.font-sans { font-family: $font-sans; }
+.font-mono { font-family: $font-mono; }
+
+.font-normal { font-weight: $font-weight-normal; }
+.font-medium { font-weight: $font-weight-medium; }
+.font-semibold { font-weight: $font-weight-semibold; }
+.font-bold { font-weight: $font-weight-bold; }
+
+// ============================================
+// LINE CLAMPING
+// ============================================
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+// ============================================
+// COLOR UTILITIES
+// ============================================
+
+// Text colors
+.text-primary { color: $color-text-primary; }
+.text-secondary { color: $color-text-secondary; }
+.text-tertiary { color: $color-text-tertiary; }
+.text-accent { color: $color-accent-primary; }
+
+// Background colors
+.bg-primary { background-color: $color-bg-primary; }
+.bg-secondary { background-color: $color-bg-secondary; }
+.bg-tertiary { background-color: $color-bg-tertiary; }
+.bg-accent {
+  background-color: $color-accent-primary;
+  color: $color-bg-primary;
+}
+
+// ============================================
+// BORDER UTILITIES
+// ============================================
+
+.border { border: 1px solid $color-border-light; }
+.border-t { border-top: 1px solid $color-border-light; }
+.border-r { border-right: 1px solid $color-border-light; }
+.border-b { border-bottom: 1px solid $color-border-light; }
+.border-l { border-left: 1px solid $color-border-light; }
+
+.border-light { border-color: $color-border-light; }
+.border-medium { border-color: $color-border-medium; }
+.border-dark { border-color: $color-border-dark; }
+
+.border-0 { border: none; }
+.rounded { border-radius: $radius-lg; }
+
+// ============================================
+// SHADOW UTILITIES
+// ============================================
+
+.shadow-none { box-shadow: $shadow-none; }
+.shadow-sm { box-shadow: $shadow-sm; }
+.shadow-base { box-shadow: $shadow-base; }
+.shadow-md { box-shadow: $shadow-md; }
+.shadow-lg { box-shadow: $shadow-lg; }
+.shadow-xl { box-shadow: $shadow-xl; }
+.shadow-2xl { box-shadow: $shadow-2xl; }
+
+// ============================================
+// OPACITY UTILITIES
+// ============================================
+
+.opacity-0 { opacity: 0; }
+.opacity-25 { opacity: 0.25; }
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+.opacity-100 { opacity: 1; }
+
+// ============================================
+// TRANSITION & ANIMATION
+// ============================================
+
+.transition-all { transition: all $transition-normal; }
+.transition-colors { transition: background-color $transition-normal, color $transition-normal, border-color $transition-normal; }
+.transition-transform { transition: transform $transition-normal; }
+.transition-opacity { transition: opacity $transition-normal; }
+
+// ============================================
+// OVERFLOW UTILITIES
+// ============================================
+
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+
+// ============================================
+// POSITION UTILITIES
+// ============================================
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+
+// ============================================
+// NEWSPAPER-SPECIFIC UTILITIES
+// ============================================
+
+.byline { @include byline; }
+.newspaper-rule { @include newspaper-rule; }
+.double-rule { @include double-rule; }
+.section-divider { @include section-divider; }
+.column-divider { @include column-divider; }
+
+// ============================================
+// CLEARFIX
+// ============================================
+
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+// ============================================
+// CONTAINER
+// ============================================
+
+.container {
+  @include container;
+}
+
+// ============================================
+// RESPONSIVE UTILITIES
+// ============================================
+
+// Hide on mobile
+.hide-mobile {
+  @media (max-width: $breakpoint-md - 1px) {
+    display: none;
+  }
+}
+
+// Show only on mobile
+.show-mobile {
+  display: none;
+
+  @media (max-width: $breakpoint-md - 1px) {
+    display: block;
+  }
+}
+
+// Show only on tablet
+.show-tablet {
+  display: none;
+
+  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg - 1px) {
+    display: block;
+  }
+}
+
+// Show only on desktop
+.show-desktop {
+  display: none;
+
+  @media (min-width: $breakpoint-lg) {
+    display: block;
+  }
+}
+
+// Small breakpoint responsive classes
+@media (min-width: $breakpoint-sm) {
+  .sm\:hidden { display: none; }
+  .sm\:block { display: block; }
+  .sm\:flex { display: flex; }
+}
+
+// Medium breakpoint responsive classes
+@media (min-width: $breakpoint-md) {
+  .md\:hidden { display: none; }
+  .md\:block { display: block; }
+  .md\:flex { display: flex; }
+  .md\:grid { display: grid; }
+}
+
+// Large breakpoint responsive classes
+@media (min-width: $breakpoint-lg) {
+  .lg\:hidden { display: none; }
+  .lg\:block { display: block; }
+  .lg\:flex { display: flex; }
+  .lg\:grid { display: grid; }
+}
+
+// ============================================
+// PRINT STYLES
+// ============================================
+
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  a, a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  ul, ol, dl {
+    page-break-inside: avoid;
+  }
+}

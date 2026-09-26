@@ -1,0 +1,23 @@
+/**
+ * Config - Import all design tokens
+ * Use this file to import all variables in your SCSS files
+ *
+ * Usage in any SCSS file:
+ * @import './config.scss';
+ *
+ * Then use: $color-primary, $spacing-lg, $font-serif, etc.
+ */
+
+@import './colors.scss';
+@import './spacing.scss';
+@import './typography.scss';
+@import './breakpoints.scss';
+
+/**
+ * All variables are now available globally
+ *
+ * Colors: $color-newsprint, $color-accent-primary, $color-text-primary, etc.
+ * Spacing: $spacing-xs through $spacing-2xl, $shadow-*, $radius-*, $transition-*
+ * Typography: $font-serif, $font-sans, $font-size-*, $font-weight-*, $line-height-*
+ * Breakpoints: $breakpoint-xs, $breakpoint-sm, $breakpoint-md, etc.
+ */

@@ -1,0 +1,101 @@
+/**
+ * Mixins - Layout & Positioning
+ * Flexbox, grid, and container layout patterns
+ */
+
+@import '../variables/config.scss';
+
+// ============================================
+// CONTAINER MIXIN
+// ============================================
+
+/**
+ * Container - responsive max-width wrapper
+ * @example @include container;
+ */
+@mixin container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 $spacing-lg;
+
+  @media (max-width: $breakpoint-md - 1px) {
+    padding: 0 $spacing-md;
+  }
+}
+
+// ============================================
+// FLEXBOX MIXINS
+// ============================================
+
+/**
+ * Flex center - centered flex container
+ * @example @include flex-center;
+ */
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/**
+ * Flex between - space-between flex layout
+ * @example @include flex-between;
+ */
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/**
+ * Flex column - vertical flex layout
+ * @example @include flex-col;
+ */
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * Flex gap - flex with consistent gap
+ * @example @include flex-gap;
+ */
+@mixin flex-gap {
+  display: flex;
+  gap: $spacing-md;
+}
+
+/**
+ * Flex column gap - vertical flex with gap
+ * @example @include flex-col-gap;
+ */
+@mixin flex-col-gap {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+// ============================================
+// GRID MIXINS
+// ============================================
+
+/**
+ * Grid columns - responsive grid layout
+ * @param {number} $cols - Number of columns
+ * @example @include grid-cols(3);
+ */
+@mixin grid-cols($cols) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+}
+
+/**
+ * Grid gap - grid with consistent gap
+ * @example @include grid-gap;
+ */
+@mixin grid-gap {
+  display: grid;
+  gap: $spacing-md;
+}

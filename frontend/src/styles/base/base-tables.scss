@@ -1,0 +1,118 @@
+/**
+ * Base - Tables
+ * Table, thead, tbody, tfoot, tr, td, th styling
+ */
+
+@import '../variables/config.scss';
+
+// ============================================
+// TABLE
+// ============================================
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: $spacing-md;
+  background-color: $color-bg-primary;
+  overflow: hidden;
+  border-radius: $radius-lg;
+}
+
+// ============================================
+// TABLE HEAD
+// ============================================
+
+thead {
+  background-color: $color-bg-secondary;
+  border-bottom: 2px solid $color-border-medium;
+}
+
+// ============================================
+// TABLE BODY
+// ============================================
+
+tbody {
+  tr {
+    border-bottom: 1px solid $color-border-light;
+    transition: background-color $transition-normal;
+
+    &:hover {
+      background-color: $color-bg-secondary;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+// ============================================
+// TABLE FOOTER
+// ============================================
+
+tfoot {
+  background-color: $color-bg-secondary;
+  border-top: 2px solid $color-border-medium;
+  font-weight: $font-weight-semibold;
+}
+
+// ============================================
+// TABLE CELLS
+// ============================================
+
+th {
+  padding: $spacing-sm $spacing-md;
+  text-align: left;
+  font-weight: $font-weight-bold;
+  font-family: $font-serif;
+  color: $color-text-primary;
+  vertical-align: middle;
+}
+
+td {
+  padding: $spacing-sm $spacing-md;
+  text-align: left;
+  vertical-align: middle;
+  color: $color-text-primary;
+}
+
+// ============================================
+// TABLE VARIANTS
+// ============================================
+
+.table-striped {
+  tbody {
+    tr:nth-child(odd) {
+      background-color: $color-bg-secondary;
+
+      &:hover {
+        background-color: $color-bg-tertiary;
+      }
+    }
+  }
+}
+
+.table-bordered {
+  border: 1px solid $color-border-light;
+
+  th, td {
+    border: 1px solid $color-border-light;
+  }
+}
+
+.table-compact {
+  th, td {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+  }
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-bottom: $spacing-md;
+
+  table {
+    margin-bottom: 0;
+  }
+}

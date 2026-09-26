@@ -1,0 +1,60 @@
+/**
+ * Mixins - Media Queries
+ * Responsive design breakpoint mixins
+ */
+
+@import '../variables/config.scss';
+
+// ============================================
+// MEDIA QUERY MIXINS (Mobile-First)
+// ============================================
+
+/**
+ * Media query mixin for small devices (640px+)
+ * @example @include media-sm { ... }
+ */
+@mixin media-sm {
+  @media (min-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+/**
+ * Media query mixin for medium devices (768px+)
+ * @example @include media-md { ... }
+ */
+@mixin media-md {
+  @media (min-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+/**
+ * Media query mixin for large devices (1024px+)
+ * @example @include media-lg { ... }
+ */
+@mixin media-lg {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+/**
+ * Media query mixin for extra large devices (1280px+)
+ * @example @include media-xl { ... }
+ */
+@mixin media-xl {
+  @media (min-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+/**
+ * Media query mixin for ultra-wide devices (1536px+)
+ * @example @include media-2xl { ... }
+ */
+@mixin media-2xl {
+  @media (min-width: $breakpoint-2xl) {
+    @content;
+  }
+}

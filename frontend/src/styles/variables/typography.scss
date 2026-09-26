@@ -1,0 +1,50 @@
+/**
+ * Typography - Vintage Newspaper Theme
+ * Font families, sizes, weights, and line heights
+ */
+
+// ============================================
+// FONT FAMILIES
+// ============================================
+
+// Serif for headlines (vintage newspaper masthead style)
+$font-serif: Georgia, 'Garamond', 'Times New Roman', serif;
+
+// Sans-serif for body (for readability, classic newspaper approach)
+$font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+  'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+
+// Monospace for code snippets
+$font-mono: Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+
+// ============================================
+// FONT SIZES
+// ============================================
+
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.875rem;  // 14px
+$font-size-base: 1rem;    // 16px
+$font-size-lg: 1.125rem;  // 18px
+$font-size-xl: 1.25rem;   // 20px
+$font-size-2xl: 1.5rem;   // 24px (article snippet)
+$font-size-3xl: 1.875rem; // 30px (article headline)
+$font-size-4xl: 2.25rem;  // 36px (section title)
+$font-size-5xl: 3rem;     // 48px (masthead)
+
+// ============================================
+// FONT WEIGHTS
+// ============================================
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// ============================================
+// LINE HEIGHTS
+// ============================================
+// Generous for vintage newspaper readability
+
+$line-height-tight: 1.3;   // Headlines
+$line-height-normal: 1.6;  // Body text (classic newspaper)
+$line-height-relaxed: 1.8; // Long-form articles

@@ -1,0 +1,217 @@
+/**
+ * Base - Forms
+ * Input, select, textarea, and button element styling
+ */
+
+@import '../variables/config.scss';
+@import '../mixins/mixins-index.scss';
+
+// ============================================
+// LABEL
+// ============================================
+
+label {
+  display: block;
+  margin-bottom: $spacing-xs;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  cursor: pointer;
+}
+
+// ============================================
+// TEXT INPUTS
+// ============================================
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+textarea,
+select {
+  @include input-base;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+// ============================================
+// CHECKBOX & RADIO
+// ============================================
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: $spacing-xs;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: $color-accent-primary;
+}
+
+// ============================================
+// TEXTAREA
+// ============================================
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+// ============================================
+// SELECT
+// ============================================
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right $spacing-sm center;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5em;
+}
+
+// ============================================
+// BUTTONS
+// ============================================
+
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="file"]::file-selector-button {
+  font-family: $font-sans;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  transition: all $transition-normal;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.btn {
+  display: inline-block;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-lg;
+  cursor: pointer;
+  border: none;
+  transition: all $transition-normal;
+  text-decoration: none;
+
+  &:focus {
+    outline: 2px solid $color-accent-primary;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  @include button-primary;
+}
+
+.btn-secondary {
+  @include button-secondary;
+}
+
+// ============================================
+// FILE INPUT
+// ============================================
+
+input[type="file"] {
+  display: block;
+  padding: $spacing-sm;
+  border: 1px dashed $color-border-medium;
+  border-radius: $radius-lg;
+  cursor: pointer;
+
+  &::file-selector-button {
+    @include button-secondary;
+    margin-right: $spacing-sm;
+  }
+}
+
+// ============================================
+// FIELDSET
+// ============================================
+
+fieldset {
+  border: 1px solid $color-border-light;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+legend {
+  padding: 0 $spacing-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+// ============================================
+// FORM GROUP
+// ============================================
+
+.form-group {
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    margin-bottom: $spacing-xs;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+  }
+}
+
+// ============================================
+// FORM HELP TEXT
+// ============================================
+
+.form-help {
+  @include text-small;
+  display: block;
+  margin-top: $spacing-xs;
+  color: $color-text-tertiary;
+}
+
+.form-error {
+  @include text-small;
+  display: block;
+  margin-top: $spacing-xs;
+  color: $color-error;
+}
+
+.form-success {
+  @include text-small;
+  display: block;
+  margin-top: $spacing-xs;
+  color: $color-success;
+}
