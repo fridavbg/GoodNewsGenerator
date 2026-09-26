@@ -18,12 +18,13 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         (fav: { id: any }) => fav.id === article.id,
     );
 
-    const handleToggleFavorite = () => {
+    const handleToggleFavorite = (e: React.MouseEvent) => {
+        e.stopPropagation();
         dispatch(toggleFavorite(article));
     };
 
     const handleCardClick = () => {
-        window.open(article.url, "_blank");
+        window.open(article.url, "_blank", "noopener,noreferrer");
     };
 
     return (
