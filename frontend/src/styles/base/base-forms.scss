@@ -4,7 +4,7 @@
  */
 
 @import '../variables/config.scss';
-@import '../mixins/mixins-index.scss';
+@import '../mixins/index.scss';
 
 // ============================================
 // LABEL
@@ -55,11 +55,11 @@ input[type="number"] {
 
 input[type="checkbox"],
 input[type="radio"] {
-  width: 18px;
-  height: 18px;
+  width: 1.125rem; // 18px
+  height: 1.125rem; // 18px
   vertical-align: middle;
   margin-right: $spacing-xs;
-  margin-top: 2px;
+  margin-top: $spacing-2xs;
   cursor: pointer;
   accent-color: $color-accent-primary;
 }
@@ -70,7 +70,7 @@ input[type="radio"] {
 
 textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 7.5rem; // 120px
 }
 
 // ============================================

@@ -1,5 +1,5 @@
 @import '../variables/config.scss';
-@import '../mixins/mixins-index.scss';
+@import '../mixins/index.scss';
 
 .container {
   @include container;
@@ -8,15 +8,15 @@
   margin-right: auto;
 
   &--sm {
-    max-width: 640px;
+    max-width: $breakpoint-sm;
   }
 
   &--md {
-    max-width: 768px;
+    max-width: $breakpoint-md;
   }
 
   &--lg {
-    max-width: 1024px;
+    max-width: $breakpoint-lg;
   }
 
   &--max {

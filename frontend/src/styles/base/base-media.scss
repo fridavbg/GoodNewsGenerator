@@ -11,7 +11,6 @@
 
 img {
   max-width: 100%;
-  height: auto;
   display: block;
   border-radius: $radius-lg;
 
@@ -119,5 +118,5 @@ video, iframe, embed, object {
 
 img[loading="lazy"] {
   background-color: $color-bg-secondary;
-  min-height: 200px;
+  min-height: 12.5rem; // 200px
 }

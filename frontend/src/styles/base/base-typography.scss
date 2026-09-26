@@ -3,45 +3,45 @@
  * Element-level typography styling
  */
 
-@import '../variables/config.scss';
-@import '../mixins/mixins-index.scss';
+@import "../variables/config.scss";
+@import "../mixins/index.scss";
 
 // ============================================
 // HEADINGS
 // ============================================
 
 h1 {
-  @include heading-h1;
+    @include heading-h1;
 }
 
 h2 {
-  @include heading-h2;
+    @include heading-h2;
 }
 
 h3 {
-  @include heading-h3;
+    @include heading-h3;
 }
 
 h4 {
-  @include heading-h4;
+    @include heading-h4;
 }
 
 h5 {
-  font-family: $font-serif;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-bold;
-  color: $color-text-primary;
-  margin-bottom: $spacing-sm;
+    font-family: $font-serif;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-sm;
 }
 
 h6 {
-  font-family: $font-serif;
-  font-size: $font-size-base;
-  font-weight: $font-weight-bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: $color-text-primary;
-  margin-bottom: $spacing-sm;
+    font-family: $font-serif;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $color-text-primary;
+    margin-bottom: $spacing-sm;
 }
 
 // ============================================
@@ -49,24 +49,27 @@ h6 {
 // ============================================
 
 p {
-  @include text-body;
-  margin-bottom: $spacing-md;
+    @include text-body;
+    margin-bottom: $spacing-sm;
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 
-small, .text-small {
-  @include text-small;
+small,
+.text-small {
+    @include text-small;
 }
 
-strong, .font-bold {
-  font-weight: $font-weight-bold;
+strong,
+.font-bold {
+    font-weight: $font-weight-bold;
 }
 
-em, .italic {
-  font-style: italic;
+em,
+.italic {
+    font-style: italic;
 }
 
 // ============================================
@@ -74,66 +77,67 @@ em, .italic {
 // ============================================
 
 a {
-  color: $color-accent-primary;
-  text-decoration: none;
-  transition: color $transition-normal;
-  border-bottom: 1px solid transparent;
+    color: $color-accent-primary;
+    text-decoration: none;
+    transition: color $transition-normal;
+    border-bottom: 1px solid transparent;
 
-  &:hover {
-    color: $color-accent-primary-dark;
-    border-bottom-color: $color-accent-primary;
-  }
+    &:hover {
+        color: $color-accent-primary-dark;
+        border-bottom-color: $color-accent-primary;
+    }
 
-  &:active {
-    color: $color-accent-primary-dark;
-  }
+    &:active {
+        color: $color-accent-primary-dark;
+    }
 
-  &:visited {
-    color: $color-accent-light;
-  }
+    &:visited {
+        color: $color-accent-light;
+    }
 
-  &:focus {
-    outline: 2px solid $color-accent-primary;
-    outline-offset: 2px;
-  }
+    &:focus {
+        outline: 2px solid $color-accent-primary;
+        outline-offset: 2px;
+    }
 }
 
 // ============================================
 // LISTS
 // ============================================
 
-ul, ol {
-  margin: 0 0 $spacing-md $spacing-lg;
+ul,
+ol {
+    margin: 0 0 $spacing-md $spacing-lg;
 
-  li {
-    margin-bottom: $spacing-xs;
-    line-height: $line-height-normal;
-  }
+    li {
+        margin-bottom: $spacing-xs;
+        line-height: $line-height-normal;
+    }
 }
 
 ul {
-  list-style-type: disc;
+    list-style-type: disc;
 }
 
 ol {
-  list-style-type: decimal;
+    list-style-type: decimal;
 }
 
 dl {
-  margin-bottom: $spacing-md;
+    margin-bottom: $spacing-md;
 }
 
 dt {
-  font-weight: $font-weight-semibold;
-  margin-top: $spacing-md;
-  margin-bottom: $spacing-xs;
-  color: $color-text-primary;
+    font-weight: $font-weight-semibold;
+    margin-top: $spacing-md;
+    margin-bottom: $spacing-xs;
+    color: $color-text-primary;
 }
 
 dd {
-  margin-left: $spacing-lg;
-  margin-bottom: $spacing-sm;
-  color: $color-text-secondary;
+    margin-left: $spacing-lg;
+    margin-bottom: $spacing-sm;
+    color: $color-text-secondary;
 }
 
 // ============================================
@@ -141,48 +145,49 @@ dd {
 // ============================================
 
 blockquote {
-  border-left: 4px solid $color-accent-primary;
-  padding-left: $spacing-lg;
-  margin: $spacing-md 0;
-  font-style: italic;
-  color: $color-text-secondary;
+    border-left: 4px solid $color-accent-primary;
+    padding-left: $spacing-lg;
+    margin: $spacing-md 0;
+    font-style: italic;
+    color: $color-text-secondary;
 
-  footer {
-    font-size: $font-size-sm;
-    color: $color-text-tertiary;
-    margin-top: $spacing-sm;
-    font-style: normal;
-  }
+    footer {
+        font-size: $font-size-sm;
+        color: $color-text-tertiary;
+        margin-top: $spacing-sm;
+        font-style: normal;
+    }
 }
 
 // ============================================
 // CODE & PRE
 // ============================================
 
-code, pre {
-  font-family: $font-mono;
-  font-size: $font-size-sm;
-  background-color: $color-bg-secondary;
-  color: $color-ink-dark;
-  border-radius: $radius-sm;
+code,
+pre {
+    font-family: $font-mono;
+    font-size: $font-size-sm;
+    background-color: $color-bg-secondary;
+    color: $color-ink-dark;
+    border-radius: $radius-sm;
 }
 
 code {
-  padding: $spacing-xs $spacing-sm;
-  display: inline-block;
+    padding: $spacing-xs $spacing-sm;
+    display: inline-block;
 }
 
 pre {
-  padding: $spacing-md;
-  overflow-x: auto;
-  margin-bottom: $spacing-md;
-  line-height: 1.5;
+    padding: $spacing-md;
+    overflow-x: auto;
+    margin-bottom: $spacing-md;
+    line-height: 1.5;
 
-  code {
-    background: transparent;
-    padding: 0;
-    display: block;
-  }
+    code {
+        background: transparent;
+        padding: 0;
+        display: block;
+    }
 }
 
 // ============================================
@@ -190,9 +195,9 @@ pre {
 // ============================================
 
 mark {
-  background-color: rgba($color-accent-primary, 0.2);
-  padding: 2px 4px;
-  border-radius: 2px;
+    background-color: rgba($color-accent-primary, 0.2);
+    padding: $spacing-2xs $spacing-xs;
+    border-radius: $radius-lg;
 }
 
 // ============================================
@@ -200,8 +205,8 @@ mark {
 // ============================================
 
 abbr[title] {
-  border-bottom: 1px dotted $color-border-medium;
-  cursor: help;
+    border-bottom: 1px dotted $color-border-medium;
+    cursor: help;
 }
 
 // ============================================
@@ -209,7 +214,7 @@ abbr[title] {
 // ============================================
 
 hr {
-  @include newspaper-rule;
-  border: none;
-  background: none;
+    @include newspaper-rule;
+    border: none;
+    background: none;
 }
