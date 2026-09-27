@@ -9,11 +9,11 @@
   ],
   "scripts": {
     "postinstall": "npm run build -w @goodnews/shared",
-    "dev": "npm run dev -w @goodnews/shared & npm run dev -w backend & npm run dev -w frontend",
-    "build": "npm run build -w @goodnews/shared && npm run build -w backend && npm run build -w frontend"
+    "dev": "concurrently -n shared,api,web -c blue,green,magenta \"npm run dev -w @goodnews/shared\" \"npm run dev -w backend\" \"npm run dev -w frontend\""
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19"
+    "@types/cors": "^2.8.19",
+    "concurrently": "^10.0.5"
   },
   "overrides": {
     "typescript": "^5.9.3"
