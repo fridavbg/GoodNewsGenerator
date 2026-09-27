@@ -14,9 +14,9 @@ const rootReducer = combineReducers({
     ui: uiReducer,
 });
 
-// Derived from the reducer (not the store) so middleware can reference it without a circular type
 export type RootState = ReturnType<typeof rootReducer>;
 
+// Derived from the reducer (not the store) so middleware can reference it without a circular type
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
@@ -27,7 +27,7 @@ export const store = configureStore({
                 ignoredPaths: ['ui.favorites'],
             },
         }).concat(storageMiddleware),
-    devTools: process.env.REACT_APP_ENABLE_REDUX_DEVTOOLS !== 'false',
+    devTools: import.meta.env.DEV,
 });
 
 export type AppDispatch = typeof store.dispatch;

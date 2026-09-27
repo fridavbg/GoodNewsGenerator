@@ -6,11 +6,11 @@
 import axios from 'axios';
 import { NewsApiResponse, NormalizedArticle, NewsApiArticle } from './types';
 
-const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 const BASE_URL = 'https://newsapi.org/v2';
 
 if (!API_KEY) {
-    console.warn('REACT_APP_NEWS_API_KEY is not set in environment variables');
+    console.warn('VITE_NEWS_API_KEY is not set in environment variables');
 }
 
 /**
