@@ -1,116 +1,91 @@
 import { Router, Request, Response } from 'express';
-import { searchNews } from '../services/newsService';
+import { searchNews, toArticle } from '../services/newsService';
 import { analyzeArticle, filterPositiveNews } from '../services/claudeService';
 import { asyncHandler, BadRequestError, AppError } from '../middleware/errorMiddleware';
+import { SearchRequestSchema, type SearchResponse } from '@goodnews/shared';
 
 const router = Router();
 
-interface SearchRequest {
-  topic?: string;
-  limit?: number;
-}
-
 /**
  * POST /api/search
- * Search for positive news articles and analyze with Claude
+ * Fetch articles for a topic, keep the positive ones, and have Claude explain why each is good news.
+ * @param req - Body matching SearchRequestSchema: `topic` (required), `limit` (1–100, default 10)
+ * @param res - Responds with a SearchResponse: `{ topic, count, results: Article[], message? }`,
+ *   where each Article's `whyGood` is Claude's explanation, or null if analysis failed
+ * @throws BadRequestError if the request body fails validation
+ * @throws AppError on NewsAPI or other unexpected failures (a single failed analysis does not fail the request)
  *
- * Request body:
- * {
- *   "topic": "climate solutions",
- *   "limit": 5
- * }
- *
- * Response:
+ * @example
+ * // Request
+ * { "topic": "climate solutions", "limit": 5 }
+ * // Response
  * {
  *   "topic": "climate solutions",
  *   "count": 3,
- *   "results": [
- *     {
- *       "article": { title, description, url, ... },
- *       "analysis": "Why this is good news..."
- *     }
- *   ]
+ *   "results": [{ "id": "a1b2c3d4e5f6", "title": "...", "url": "...", "whyGood": "..." }]
  * }
  */
 router.post(
   '/',
   asyncHandler(async (req: Request, res: Response) => {
-    const { topic, limit = 10 } = req.body as SearchRequest;
+    const parsed = SearchRequestSchema.safeParse(req.body);
+    if (!parsed.success) {
+      throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
+    }
+    const { topic, limit } = parsed.data;
 
     console.log(`[POST /api/search] Request:`, { topic, limit });
 
-    // Validate input
-    if (!topic || typeof topic !== 'string') {
-      throw new BadRequestError('Topic is required and must be a string');
-    }
-
-    if (typeof limit !== 'number' || limit < 1 || limit > 100) {
-      throw new BadRequestError('Limit must be a number between 1 and 100');
-    }
-
     try {
-      // Step 1: Fetch articles from NewsAPI
       console.log(`[search] Step 1: Fetching articles from NewsAPI...`);
       const articles = await searchNews(topic, limit);
 
       if (articles.length === 0) {
         console.warn(`[search] No articles found for topic: "${topic}"`);
 
-        res.json({
+        const body: SearchResponse = {
           topic,
           count: 0,
           results: [],
           message: 'No articles found for this topic',
-        });
+        };
+        res.json(body);
         return;
       }
 
-      // Step 2: Filter for positive news
       console.log(`[search] Step 2: Filtering for positive news...`);
       const positiveArticles = filterPositiveNews(articles);
 
       if (positiveArticles.length === 0) {
         console.warn(`[search] No positive articles found after filtering`);
-        res.json({
+        const body: SearchResponse = {
           topic,
           count: 0,
           results: [],
           message: 'No positive news found for this topic',
-        });
+        };
+        res.json(body);
         return;
       }
 
-      // Step 3: Analyze each article with Claude
       console.log(`[search] Step 3: Analyzing ${positiveArticles.length} articles...`);
       const results = await Promise.all(
         positiveArticles.map(async (article) => {
           try {
             const analysis = await analyzeArticle(article, topic);
-            return {
-              article,
-              analysis,
-            };
+            return toArticle(article, analysis);
           } catch (analyzeError) {
             console.error(`[search] Error analyzing article "${article.title}":`, analyzeError);
-            // Continue with other articles even if one fails
-            return {
-              article,
-              analysis: 'Analysis unavailable (API error)',
-              error: analyzeError instanceof Error ? analyzeError.message : 'Unknown error',
-            };
+            return toArticle(article, null);
           }
         })
       );
 
       console.log(`[search] ✓ Successfully processed ${results.length} articles`);
 
-      res.json({
-        topic,
-        count: results.length,
-        results,
-      });
+      const body: SearchResponse = { topic, count: results.length, results };
+      res.json(body);
     } catch (error) {
-      // Re-throw to be caught by error middleware
       if (error instanceof AppError) {
         throw error;
       }
