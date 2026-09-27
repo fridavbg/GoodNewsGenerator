@@ -1,22 +1,18 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { toggleFavorite } from "../../store/slices/uiSlice";
-import { NormalizedArticle } from "../../services/types";
+import type { Article } from "@goodnews/shared";
 import { AiFillStar } from "react-icons/ai";
 import "./ArticleCard.scss";
 
 interface ArticleCardProps {
-    article: NormalizedArticle;
+    article: Article;
 }
 
 export default function ArticleCard({ article }: ArticleCardProps) {
     const dispatch = useAppDispatch();
-    const favorites = useAppSelector(
-        (state: { ui: { favorites: any } }) => state.ui.favorites,
-    );
-    const isFavorited = favorites.some(
-        (fav: { id: any }) => fav.id === article.id,
-    );
+    const favorites = useAppSelector((state) => state.ui.favorites);
+    const isFavorited = favorites.some((fav) => fav.id === article.id);
 
     const handleToggleFavorite = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -61,6 +57,13 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                     <p className="article-card__description">
                         {article.description}
                     </p>
+                )}
+
+                {article.whyGood && (
+                    <aside className="article-card__why">
+                        <strong>Why this is good news:</strong>{" "}
+                        {article.whyGood}
+                    </aside>
                 )}
 
                 <footer className="article-card__footer">

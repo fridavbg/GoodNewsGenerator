@@ -1,27 +1,24 @@
 import { config } from '../config';
 import Anthropic from '@anthropic-ai/sdk';
 import { ExternalApiError } from '../middleware/errorMiddleware';
+import type { NewsApiArticle } from '../types/newsApi';
 
+/**
+ * Shared Anthropic client for all Claude requests.
+ * @remarks Authenticated with ANTHROPIC_API_KEY from config
+ */
 const client = new Anthropic({
   apiKey: config.ANTHROPIC_API_KEY,
 });
 
-export interface Article {
-  title: string;
-  description: string;
-  url: string;
-  source: { name: string };
-  urlToImage?: string;
-  publishedAt: string;
-}
-
 /**
- * Analyze a single article using Claude API
- * @param article - The article to analyze
- * @param topic - The search topic for context
- * @returns Analysis string explaining why this is good news
+ * Ask Claude to explain in 1–2 sentences why an article is good news for a topic.
+ * @param article - Raw NewsAPI article to analyze
+ * @param topic - Search topic the explanation should relate to
+ * @returns Short explanation of why the article is good news (mock text in MOCK_MODE)
+ * @throws ExternalApiError on Claude failures (bad key, rate limit, timeout, empty response)
  */
-export async function analyzeArticle(article: Article, topic: string): Promise<string> {
+export async function analyzeArticle(article: NewsApiArticle, topic: string): Promise<string> {
   try {
     if (config.MOCK_MODE) {
       console.log(`[MOCK] Analyzing article: "${article.title}" for topic: "${topic}"`);
@@ -30,8 +27,11 @@ export async function analyzeArticle(article: Article, topic: string): Promise<s
 
     console.log(`[CLAUDE API] Analyzing article: "${article.title}"`);
 
+    const descriptionLine = article.description ? `Description: ${article.description}\n` : '';
+
     const prompt = `
       Article Title: ${article.title}
+      ${descriptionLine}
       Description: ${article.description}
  
       User searched for: "${topic}"
@@ -85,12 +85,13 @@ export async function analyzeArticle(article: Article, topic: string): Promise<s
     throw new ExternalApiError('Failed to analyze article with Claude API', 'Anthropic', error);
   }
 }
+
 /**
- * Filter articles to only positive/good news using keyword heuristics
- * @param articles - Articles to filter
- * @returns Filtered articles matching positive news keywords
+ * Keep only articles whose title or description contains a positive keyword.
+ * @param articles - Raw NewsAPI articles to filter
+ * @returns Articles matching at least one keyword (case-insensitive)
  */
-export function filterPositiveNews(articles: Article[]): Article[] {
+export function filterPositiveNews(articles: NewsApiArticle[]): NewsApiArticle[] {
   const positiveKeywords = [
     'breakthrough',
     'success',
@@ -135,9 +136,12 @@ export function filterPositiveNews(articles: Article[]): Article[] {
 }
 
 /**
- * Generate mock analysis for testing/development
+ * Return a random canned analysis so development can run without calling Claude.
+ * @param article - Article being analyzed (currently unused)
+ * @param topic - Search topic inserted into the mock text
+ * @returns One of several fixed explanations mentioning the topic
  */
-function generateMockAnalysis(article: Article, topic: string): string {
+function generateMockAnalysis(article: NewsApiArticle, topic: string): string {
   const mockAnalyses = [
     `This article demonstrates real progress in ${topic}, highlighting innovative solutions that are making a tangible difference in the field.`,
     `Exciting developments in ${topic} show how collaboration and forward-thinking approaches are creating positive outcomes.`,

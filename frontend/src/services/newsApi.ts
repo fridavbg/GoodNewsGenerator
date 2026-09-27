@@ -1,173 +1,40 @@
 /**
- * NewsAPI Service
- * Axios instance and API functions for fetching news articles
+ * Backend API client.
+ * All news comes from our own backend; no third-party keys live in the browser.
  */
-
 import axios from 'axios';
-import { NewsApiResponse, NormalizedArticle, NewsApiArticle } from './types';
-
-const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
-const BASE_URL = 'https://newsapi.org/v2';
-
-if (!API_KEY) {
-    console.warn('REACT_APP_NEWS_API_KEY is not set in environment variables');
-}
+import type { SearchResponse } from '@goodnews/shared';
 
 /**
- * Axios instance with base configuration
+ * Shared axios client for all backend requests.
+ * @remarks Uses VITE_API_URL as base URL and a 30s timeout
  */
 const apiClient = axios.create({
-    baseURL: BASE_URL,
-    timeout: 10000, // 10 second timeout
-    params: {
-        apiKey: API_KEY,
-    },
+    baseURL: import.meta.env.VITE_API_URL,
+    timeout: 30000, // Claude analysis can take several seconds
 });
 
 /**
- * Response interceptor for error handling
+ * Normalize every failed request into a plain Error.
+ * @param response - Successful responses pass through unchanged
+ * @throws Error with the backend's `message`, falling back to axios's message or "Request failed"
  */
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
-        console.error('API Error:', error.response?.data || error.message);
-        throw new Error(
-            error.response?.data?.message ||
-            error.message ||
-            'Failed to fetch news articles'
-        );
+        const message = error.response?.data?.message ?? error.message ?? 'Request failed';
+        return Promise.reject(new Error(message));
     }
 );
 
 /**
- * Transform NewsAPI article to normalized format
+ * Ask the backend for positive news about a topic.
+ * @param topic - Search term (e.g., "climate solutions")
+ * @param limit - Number of articles to fetch, 1–100 (default 10)
+ * @returns SearchResponse with articles and Claude's `whyGood` explanations
+ * @throws Error with the backend's message if the request fails
  */
-function normalizeArticle(article: NewsApiArticle, index: number): NormalizedArticle {
-    return {
-        id: `${article.source.name}-${article.publishedAt}-${index}`,
-        title: article.title,
-        description: article.description || undefined,
-        url: article.url,
-        imageUrl: article.urlToImage || undefined,
-        source: article.source.name,
-        author: article.author || undefined,
-        publishedAt: article.publishedAt,
-        sentiment: undefined, // Can be populated by sentiment analysis later
-        summary: undefined, // Can be populated by summarization later
-    };
+export async function searchGoodNews(topic: string, limit = 10): Promise<SearchResponse> {
+    const response = await apiClient.post<SearchResponse>('/api/search', { topic, limit });
+    return response.data;
 }
-
-/**
- * Fetch top headlines by country
- */
-export async function getTopHeadlines(country: string = 'us'): Promise<NormalizedArticle[]> {
-    try {
-        const response = await apiClient.get<NewsApiResponse>('/top-headlines', {
-            params: {
-                country,
-                pageSize: 20,
-            },
-        });
-
-        if (response.data.status === 'error') {
-            throw new Error(response.data.message || 'API returned an error');
-        }
-
-        return response.data.articles.map((article, index) =>
-            normalizeArticle(article, index)
-        );
-    } catch (error) {
-        console.error('Error fetching top headlines:', error);
-        throw error;
-    }
-}
-
-/**
- * Search articles by query
- */
-export async function searchArticles(
-    query: string,
-    sortBy: 'relevancy' | 'popularity' | 'publishedAt' = 'publishedAt',
-    pageSize: number = 20
-): Promise<NormalizedArticle[]> {
-    try {
-        const response = await apiClient.get<NewsApiResponse>('/everything', {
-            params: {
-                q: query,
-                sortBy,
-                pageSize,
-                language: 'en',
-            },
-        });
-
-        if (response.data.status === 'error') {
-            throw new Error(response.data.message || 'API returned an error');
-        }
-
-        return response.data.articles.map((article, index) =>
-            normalizeArticle(article, index)
-        );
-    } catch (error) {
-        console.error('Error searching articles:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch articles by category
- */
-export async function getArticlesByCategory(
-    category: 'business' | 'entertainment' | 'general' | 'health' | 'science' | 'sports' | 'technology',
-    country: string = 'us'
-): Promise<NormalizedArticle[]> {
-    try {
-        const response = await apiClient.get<NewsApiResponse>('/top-headlines', {
-            params: {
-                category,
-                country,
-                pageSize: 20,
-            },
-        });
-
-        if (response.data.status === 'error') {
-            throw new Error(response.data.message || 'API returned an error');
-        }
-
-        return response.data.articles.map((article, index) =>
-            normalizeArticle(article, index)
-        );
-    } catch (error) {
-        console.error(`Error fetching ${category} articles:`, error);
-        throw error;
-    }
-}
-
-/**
- * Fetch articles from a specific source
- */
-export async function getArticlesBySource(
-    sourceId: string,
-    pageSize: number = 20
-): Promise<NormalizedArticle[]> {
-    try {
-        const response = await apiClient.get<NewsApiResponse>('/top-headlines', {
-            params: {
-                sources: sourceId,
-                pageSize,
-            },
-        });
-
-        if (response.data.status === 'error') {
-            throw new Error(response.data.message || 'API returned an error');
-        }
-
-        return response.data.articles.map((article, index) =>
-            normalizeArticle(article, index)
-        );
-    } catch (error) {
-        console.error(`Error fetching articles from source ${sourceId}:`, error);
-        throw error;
-    }
-}
-
-export default apiClient;

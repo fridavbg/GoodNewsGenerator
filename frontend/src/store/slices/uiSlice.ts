@@ -93,20 +93,6 @@ const uiSlice = createSlice({
         },
 
         /**
-         * Set favorites from localStorage (hydration)
-         */
-        setFavorites: (state, action: PayloadAction<Article[]>) => {
-            state.favorites = action.payload;
-        },
-
-        /**
-         * Set search history from localStorage (hydration)
-         */
-        setSearchHistory: (state, action: PayloadAction<string[]>) => {
-            state.searchHistory = action.payload;
-        },
-
-        /**
          * Reset all UI state to initial
          */
         resetUI: () => initialState,
@@ -120,8 +106,6 @@ export const {
     addToHistory,
     removeFromHistory,
     clearHistory,
-    setFavorites,
-    setSearchHistory,
     resetUI,
 } = uiSlice.actions;
 

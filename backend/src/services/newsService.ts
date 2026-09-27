@@ -1,22 +1,32 @@
-import { config } from '../config';
+import { createHash } from 'crypto';
 import axios from 'axios';
+import type { Article } from '@goodnews/shared';
+import { config } from '../config';
 import { ExternalApiError, BadRequestError } from '../middleware/errorMiddleware';
-import { Article } from './claudeService';
+import type { NewsApiArticle } from '../types/newsApi';
 
-const NEWS_API_KEY = config.NEWS_API_KEY;
 const NEWS_API_BASE_URL = 'https://newsapi.org/v2';
 
-// Create axios instance with logging
+/**
+ * Shared axios client for all NewsAPI requests.
+ * @remarks Presets the base URL, a 10s timeout and the X-Api-Key header
+ */
 const newsApiClient = axios.create({
   baseURL: NEWS_API_BASE_URL,
-  timeout: 10000, // 10 second timeout
+  timeout: 10000,
+  headers: { 'X-Api-Key': config.NEWS_API_KEY },
 });
 
-// Request interceptor - log outgoing requests
+/**
+ * Log every outgoing NewsAPI request.
+ * @param request - Axios request request (method and URL are logged)
+ * @returns The unchanged request request
+ * @throws Re-throws request setup errors after logging them
+ */
 newsApiClient.interceptors.request.use(
-  (config) => {
-    console.log(`[NewsAPI] → ${config.method?.toUpperCase()} ${config.url}`);
-    return config;
+  (request) => {
+    console.log(`[NewsAPI] → ${request.method?.toUpperCase()} ${request.url}`);
+    return request;
   },
   (error) => {
     console.error('[NewsAPI] Request error:', error.message);
@@ -24,7 +34,12 @@ newsApiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor - log responses and handle errors
+/**
+ * Log every NewsAPI response, including failures.
+ * @param response - Axios response (status and article count are logged)
+ * @returns The unchanged response
+ * @throws Re-throws the error after logging it as a server error, no response, or setup error
+ */
 newsApiClient.interceptors.response.use(
   (response) => {
     console.log(
@@ -47,14 +62,15 @@ newsApiClient.interceptors.response.use(
 );
 
 /**
- * Search for news articles by topic
+ * Search NewsAPI for recent English articles matching a topic, newest first.
  * @param topic - Search term (e.g., "climate solutions")
- * @param limit - Number of results to return (default 10)
- * @returns Array of articles
+ * @param limit - Number of results to return, 1–100 (default 10)
+ * @returns Raw NewsAPI articles (empty array if none found)
+ * @throws BadRequestError if the topic is empty or the limit is out of range
+ * @throws ExternalApiError on NewsAPI failures (bad key, rate limit, timeout, network)
  */
-export async function searchNews(topic: string, limit: number = 10): Promise<Article[]> {
+export async function searchNews(topic: string, limit: number = 10): Promise<NewsApiArticle[]> {
   try {
-    // Validate inputs
     if (!topic || topic.trim().length === 0) {
       throw new BadRequestError('Search topic cannot be empty');
     }
@@ -63,30 +79,24 @@ export async function searchNews(topic: string, limit: number = 10): Promise<Art
       throw new BadRequestError('Limit must be between 1 and 100');
     }
 
-    if (!NEWS_API_KEY) {
-      throw new Error('NEWS_API_KEY not configured');
-    }
-
     console.log(`[searchNews] Searching for "${topic}" with limit ${limit}`);
 
-    const response = await newsApiClient.get('/everything', {
+    const response = await newsApiClient.get<{ articles: NewsApiArticle[] }>('/everything', {
       params: {
         q: topic,
         sortBy: 'publishedAt',
         language: 'en',
         pageSize: limit,
-        apiKey: NEWS_API_KEY,
       },
     });
 
-    const articles = response.data.articles || [];
+    const articles = (response.data.articles ?? []).filter((a) => a.title !== '[Removed]');
     console.log(`[searchNews] ✓ Found ${articles.length} articles for "${topic}"`);
 
     return articles;
   } catch (error) {
     console.error(`[ERROR] searchNews failed:`, error);
 
-    // Handle specific error cases
     if (error instanceof BadRequestError) {
       throw error;
     }
@@ -94,7 +104,7 @@ export async function searchNews(topic: string, limit: number = 10): Promise<Art
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
         throw new ExternalApiError(
-          'Invalid NewsAPI key. Check your API_KEY in .env',
+          'Invalid NewsAPI key. Check your NEWS_API_KEY in .env',
           'NewsAPI',
           error
         );
@@ -121,14 +131,31 @@ export async function searchNews(topic: string, limit: number = 10): Promise<Art
       }
     }
 
-    if (error instanceof Error && error.message.includes('NEWS_API_KEY')) {
-      throw new ExternalApiError('NEWS_API_KEY environment variable is not set', 'NewsAPI', error);
-    }
-
     throw new ExternalApiError(
       `Failed to fetch news from NewsAPI: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'NewsAPI',
       error
     );
   }
+}
+
+/**
+ * Convert a raw NewsAPI article into the shared Article shape sent to the frontend.
+ * The id is a short SHA-1 hash of the URL, so the same article always gets the same id.
+ * @param raw - Article as returned by NewsAPI
+ * @param whyGood - Optional explanation of why the article is good news
+ * @returns Article ready for the client
+ */
+export function toArticle(raw: NewsApiArticle, whyGood: string | null = null): Article {
+  return {
+    id: createHash('sha1').update(raw.url).digest('hex').slice(0, 12),
+    title: raw.title,
+    description: raw.description,
+    url: raw.url,
+    imageUrl: raw.urlToImage,
+    source: raw.source.name,
+    author: raw.author,
+    publishedAt: raw.publishedAt,
+    whyGood,
+  };
 }

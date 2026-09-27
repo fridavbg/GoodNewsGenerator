@@ -1,23 +1,6 @@
-/**
- * Redux News Slice
- * Manages articles, loading state, error state, and current topic
- */
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface Article {
-    id: string;
-    title: string;
-    description?: string;
-    content?: string;
-    url: string;
-    imageUrl?: string;
-    source: string;
-    author?: string;
-    publishedAt: string;
-    sentiment?: 'positive' | 'neutral' | 'negative';
-    summary?: string;
-}
+import type { Article } from '@goodnews/shared';
+export type { Article };
 
 export interface NewsState {
     articles: Article[];
